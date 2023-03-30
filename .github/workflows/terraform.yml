@@ -54,7 +54,6 @@ permissions:
 
 jobs:
   terraform:
-    need: [pylint.build]
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
