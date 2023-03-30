@@ -29,4 +29,6 @@ jobs:
 
       - name: pip-install
         if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-        run: pip install -r requirements.txt -t . --no-user
+        run: |
+          pip install -r requirements.txt -t . --no-user
+          ls -l
