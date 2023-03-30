@@ -1,0 +1,2 @@
+# AWSAnimalCrossingApiGatewayLambdaLayer
+AWSAnimalCrossingApiGatewayLambdaLayer
