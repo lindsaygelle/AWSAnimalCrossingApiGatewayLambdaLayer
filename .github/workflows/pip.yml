@@ -1,20 +1,30 @@
-name: pip-install-dependencies
+name: pip
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  pip-install-dependencies:
+  install-dependencies:
+    name: install-dependencies
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest,
+    # macos-latest, or windows-latest.
+    defaults:
+      run:
+        shell: bash
+
     steps:
-      - uses: actions/checkout@v3
+      # Checkout the repository to the GitHub Actions runner.
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: pip-install
-        run: |
-          pip install -r requirements.txt -t . --no-user
+        if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+        run: pip install -r requirements.txt -t . --no-user
