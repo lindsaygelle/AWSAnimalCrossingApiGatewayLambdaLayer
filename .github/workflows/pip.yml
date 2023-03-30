@@ -3,10 +3,12 @@ name: pip
 on:
   push:
     branches: [ "main" ]
+  pull_request:
   workflow_dispatch:
 
-permissions:
-  contents: write
+
+permissions: write-all
+
 
 jobs:
   install-dependencies:
@@ -27,4 +29,6 @@ jobs:
 
       - name: pip-install
         if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-        run: pip install -r requirements.txt -t . --no-user
+        run: |
+          pip install -r requirements.txt -t . --no-user
+          ls -l
