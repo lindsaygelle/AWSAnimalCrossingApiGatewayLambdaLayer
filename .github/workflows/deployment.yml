@@ -32,8 +32,13 @@ jobs:
           pip install \
           -r requirements.txt -t . --no-user
 
-      - name: Make terraform file
-        run: echo "" > main.tf
+      - name: terraform-backend
+        run: |
+          tf.sh \
+          --bucket=${{ secrets.AWS_ACCOUNT_ID }} \
+          --region=${{ secrets.AWS_DEFAULT_REGION }}
+          ls -l
+          cat tf.sh
 
       - name: terraform-init
         run: |
