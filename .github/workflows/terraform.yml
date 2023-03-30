@@ -27,7 +27,6 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: terraform-backend
         run: |
           cat <<EOF >$TERRAFORM_BACKEND.tf
           terraform {
@@ -46,9 +45,16 @@ jobs:
       - name: terraform-init
         run: |
           terraform init \
-          -backend=false -input=false -reconfigure -no-color
+          -input=false -reconfigure -no-color
 
       - name: terraform-fmt
         run: |
           terraform fmt \
           -check -no-color -recursive
+
+      - name: terraform-plan
+        run: |
+          terraform plan \
+          -compact-warnings -detailed-exitcode -input=false -no-color
+          -var account="${{ secrets.AWS_ACCOUNT_ID }}"
+          -var region="${{ secrets.AWS_DEFAULT_REGION }}"
