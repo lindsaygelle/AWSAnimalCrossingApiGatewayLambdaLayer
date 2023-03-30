@@ -1,13 +1,13 @@
-name: terraform
+name: deployment
 
 on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+    types: [closed]
 
 jobs:
-  terraform:
+  deployment:
     environment: production
     name: deployment
     runs-on: ubuntu-latest
@@ -17,19 +17,30 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v3
+      - name: checkout-code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: terraform-setup
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - name: pip-install
+        run: |
+          pip install \
+          -r requirements.txt -t . --no-user
+
+      - name: Make terraform file
+        run: echo "" > main.tf
+
       - name: terraform-init
         run: |
           terraform init \
           -backend=false -input=false -no-color
 
-      - name: terraform-fmt
+      - name: terraform-apply
         run: |
-          terraform fmt \
-          -check -no-color -recursive
+          terraform apply \
+          -auto-approve -input=false -no-color

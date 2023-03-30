@@ -6,29 +6,16 @@ on:
   pull_request:
   workflow_dispatch:
 
-
-permissions: write-all
-
-
 jobs:
   install-dependencies:
     name: install-dependencies
     runs-on: ubuntu-latest
     environment: production
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest,
-    # macos-latest, or windows-latest.
     defaults:
       run:
         shell: bash
 
     steps:
-      # Checkout the repository to the GitHub Actions runner.
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: pip-install
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          pip install -r requirements.txt -t . --no-user
-          ls -l
