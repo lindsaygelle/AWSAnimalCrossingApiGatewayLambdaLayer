@@ -8,9 +8,9 @@ on:
 
 jobs:
   install-dependencies:
+    environment: production
     name: install-dependencies
     runs-on: ubuntu-latest
-    environment: production
 
     defaults:
       run:
