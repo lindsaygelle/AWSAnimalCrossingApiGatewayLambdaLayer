@@ -29,23 +29,30 @@ jobs:
 
       - name: pip-install
         run: |
-          pip install \
-          -r requirements.txt -t . --no-user
+          pip install -r requirements.txt -t . --no-user
 
       - name: terraform-backend
         run: |
-          tf.sh \
-          --bucket=${{ secrets.AWS_ACCOUNT_ID }} \
-          --region=${{ secrets.AWS_DEFAULT_REGION }}
-          ls -l
-          cat tf.sh
+          cat <<EOF >$TERRAFORM_BACKEND.tf
+          terraform {
+            backend "s3" {
+              bucket = "${{ secrets.AWS_ACCOUNT_ID }}"
+              key    = "AnimalCrossing/ApiGatewayLambdaLayer/terraform.tfstate"
+              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+            }
+          }
+          EOF
+
+      - name: terraform-backend-permission
+        run: |
+          chmod +x ./$TERRAFORM_BACKEND.tf
 
       - name: terraform-init
         run: |
-          terraform init \
-          -backend=false -input=false -no-color
+          terraform init -backend=false -input=false -reconfigure -no-color
 
       - name: terraform-apply
         run: |
-          terraform apply \
-          -auto-approve -input=false -no-color
+          terraform apply -compact-warnings -detailed-exitcode -input=false -no-color \
+          -var account="${{ secrets.AWS_ACCOUNT_ID }}" \
+          -var region="${{ secrets.AWS_DEFAULT_REGION }}"
