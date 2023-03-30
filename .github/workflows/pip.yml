@@ -3,10 +3,12 @@ name: pip
 on:
   push:
     branches: [ "main" ]
+  pull_request:
   workflow_dispatch:
 
-permissions:
-  contents: write
+
+permissions: write-all
+
 
 jobs:
   install-dependencies:
