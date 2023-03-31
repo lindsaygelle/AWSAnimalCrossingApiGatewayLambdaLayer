@@ -59,7 +59,7 @@ jobs:
           "${{ github.event.head_commit.author.name }}"
       - name: Run GitHub@latest commit
         run: |
-          git commit -am "Autoformatting (${{ github.ref }}/"${{ github.event.head_commit.author.name }}")"
+          git commit -am "Autoformatting (${{ github.ref }}/${{ github.event.head_commit.author.name }})"
       - name: Run GitHub@latest status
         run: |
           git status
