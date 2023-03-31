@@ -16,45 +16,28 @@ jobs:
       run:
         shell: bash
 
-    env:
-      TERRAFORM_BACKEND: terraform-backend.sh
-
     steps:
-      - uses: actions/checkout@v3
+      - name: install GitHub Actions@v3 actions/checkout@v3
+        uses: actions/checkout@v3
 
-      - name: terraform-setup
+      - name: install Terraform@v1 hashicorp/setup-terraform@v1
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-        run: |
-          cat <<EOF >$TERRAFORM_BACKEND.tf
-          terraform {
-            backend "s3" {
-              bucket = "${{ secrets.AWS_ACCOUNT_ID }}"
-              key    = "AnimalCrossing/ApiGatewayLambdaLayer/terraform.tfstate"
-              region = "${{ secrets.AWS_DEFAULT_REGION }}"
-            }
-          }
-          EOF
-
-      - name: terraform-backend-permission
-        run: |
-          chmod +x ./$TERRAFORM_BACKEND.tf
-
-      - name: terraform-init
+      - name: run Terraform@v1 init
         run: |
           terraform init \
-          -input=false -reconfigure -no-color
+          -backend=false \
+          -input=false \
+          -no-color \
+          -reconfigure
 
-      - name: terraform-fmt
+      - name: run Terraform@v1 fmt
         run: |
           terraform fmt \
-          -check -no-color -recursive
-
-      - name: terraform-plan
-        run: |
-          terraform plan \
-          -compact-warnings -detailed-exitcode -input=false -no-color
-          -var account="${{ secrets.AWS_ACCOUNT_ID }}"
-          -var region="${{ secrets.AWS_DEFAULT_REGION }}"
+          -check \
+          -list=false \
+          -no-color \
+          -recursive \
+          -write=false

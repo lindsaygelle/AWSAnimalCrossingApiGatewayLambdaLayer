@@ -2,8 +2,6 @@ name: pylint
 
 on:
   pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -13,27 +11,37 @@ jobs:
   pylint:
     name: pylint
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash
 
     strategy:
       matrix:
         python-version: ["3.8"]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: install GitHub Actions@v3 actions/checkout@v3
+        uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: install Python@${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: pip-upgrade
+      - name: install Python@${{ matrix.python-version }} pip@latest
         run: |
           python -m pip install --upgrade pip
 
-      - name: pip-install
+      - name: install Python@${{ matrix.python-version }} pylint@latest 
         run: |
-          pip install pylint
+          pip install pylint \
+          --force-reinstall \
+          --no-clean \
+          --no-color \
+          --upgrade \
+          --verbose
 
-      - name: pylint
+      - name: run pylint@latest
         run: |
           pylint $(git ls-files '*.py')

@@ -17,42 +17,11 @@ jobs:
         shell: bash
 
     steps:
-      - name: checkout-code
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
+      - name: install GitHub Actions@v3 actions/checkout@v3
+        uses: actions/checkout@v3
 
-      - name: terraform-setup
+      - name: install Terraform@v1 hashicorp/setup-terraform@v1
         uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      - name: pip-install
-        run: |
-          pip install -r requirements.txt -t . --no-user
-
-      - name: terraform-backend
-        run: |
-          cat <<EOF >$TERRAFORM_BACKEND.tf
-          terraform {
-            backend "s3" {
-              bucket = "${{ secrets.AWS_ACCOUNT_ID }}"
-              key    = "AnimalCrossing/ApiGatewayLambdaLayer/terraform.tfstate"
-              region = "${{ secrets.AWS_DEFAULT_REGION }}"
-            }
-          }
-          EOF
-
-      - name: terraform-backend-permission
-        run: |
-          chmod +x ./$TERRAFORM_BACKEND.tf
-
-      - name: terraform-init
-        run: |
-          terraform init -backend=false -input=false -reconfigure -no-color
-
-      - name: terraform-apply
-        run: |
-          terraform apply -compact-warnings -detailed-exitcode -input=false -no-color \
-          -var account="${{ secrets.AWS_ACCOUNT_ID }}" \
-          -var region="${{ secrets.AWS_DEFAULT_REGION }}"
+      
+      - name: install Python Pip@latest
+        run: python -m pip install --upgrade pip
