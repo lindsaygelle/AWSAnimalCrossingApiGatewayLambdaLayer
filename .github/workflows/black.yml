@@ -49,6 +49,7 @@ jobs:
       - name: Run Black@latest
         run: |
           black --no-color --verbose $(pwd)
+      - if: echo $(git status --porcelain | grep -q "M\|A\|D\|R\|C" && echo 0 || echo 1)
       - name: Run GitHub@latest config user.email
         run: |
           git config user.email \

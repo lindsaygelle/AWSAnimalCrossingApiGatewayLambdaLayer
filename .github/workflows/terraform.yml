@@ -39,6 +39,7 @@ jobs:
         run: |
           terraform fmt \
           -list=true -no-color -recursive -write=true
+      - if: echo $(git status --porcelain | grep -q "M\|A\|D\|R\|C" && echo 0 || echo 1)
       - name: Run GitHub@latest config user.email
         run: |
           git config user.email \
