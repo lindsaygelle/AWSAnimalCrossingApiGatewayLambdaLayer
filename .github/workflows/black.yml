@@ -6,8 +6,6 @@ on:
       - "*"
     exclude:
       - main
-    paths:
-      - "**.py"
 
 permissions:
   contents: write
