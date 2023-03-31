@@ -1,4 +1,4 @@
-name: terraform
+name: black
 
 on:
   push:
@@ -7,18 +7,19 @@ on:
     exclude:
       - main
     paths:
-      - "**/*.tf"
+      - "**/*.py"
 
 permissions:
   contents: write
 
 jobs:
-  terraform:
+  black:
     defaults:
       run:
         shell: bash
     env:
       APP: "AnimalCrossing"
+      PIP_TIMEOUT: 10
       RESOURCE: "ApiGateway"
       SERVICE: "LambdaLayer"
     environment: development
@@ -29,16 +30,25 @@ jobs:
         uses: actions/checkout@v3
       - name: Install Actions/Python@v3
         uses: actions/setup-python@v3
-      - name: Install Terraform@latest
-        uses: hashicorp/setup-terraform@v1
-      - name: Run Terraform@latest initalize
+      - name: Install Python@latest/Pip@latest
         run: |
-          terraform init \
-          -backend=false -input=false -no-color -reconfigure
-      - name: Run Terraform@latest format
+          python -m pip install pip \
+          --no-color \
+          --no-input \
+          --timeout $PIP_TIMEOUT \
+          --upgrade \
+          --verbose
+      - name: Install Python@latest/Black@latest
         run: |
-          terraform fmt \
-          -list=true -no-color -recursive -write=true
+          pip install black \
+          --no-color \
+          --no-input \
+          --timeout $PIP_TIMEOUT \
+          --upgrade \
+          --verbose
+      - name: Run Black@latest
+        run: |
+          black --no-color --verbose $(pwd)
       - name: Run GitHub@latest config user.email
         run: |
           git config user.email \
