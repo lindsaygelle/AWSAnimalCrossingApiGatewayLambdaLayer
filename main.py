@@ -22,3 +22,8 @@ def lambda_response_created() -> Dict[str, Any]:
 def lambda_response_ok() -> Dict[str, Any]:
     """lamdba_response_ok"""
     return lambda_response(OK)
+
+def hello(
+        name: str) -> None:
+    """hello"""
+    print(f"Hello {name}!")
