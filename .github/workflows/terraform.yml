@@ -49,15 +49,11 @@ jobs:
           "${{ github.event.head_commit.author.name }}"
       - name: Run GitHub@latest status
         run: |
-          git status
-      - name: Run GitHub@latest status check
-        run: echo $(git status --porcelain | grep -q "M\|A\|D\|R\|C" && echo 0 || echo 1)
+          git status --porcelain
       - name: Run GitHub@latest commit
-        if: success()
         run: |
           git commit -am "Autoformatting (${{ github.ref }})"
       - name: Run GitHub@latest push ${{ github.ref }} ${{ github.event.head_commit.author.name }}
-        if: success()
         uses: ad-m/github-push-action@master
         with:
           branch: ${{ github.ref }}
