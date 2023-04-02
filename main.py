@@ -18,3 +18,8 @@ def lambda_response_created() -> Dict[str, Any]:
 def lambda_response_ok() -> Dict[str, Any]:
     """lamdba_response_ok"""
     return lambda_response(OK)
+
+
+def lambda_response_service_unavailable() -> Dict[str, Any]:
+    """lambda_response_service_unavailable"""
+    return lambda_response(SERVICE_UNAVAILABLE)
