@@ -54,7 +54,7 @@ jobs:
           terraform init \
           -backend=false -input=false -no-color -reconfigure
       - name: Run Terraform@latest apply
-        run |
+        run: |
           terraform apply \
             -auto-approve -input=false -no-color -lock=true \
             --var-file=production.tfvars
