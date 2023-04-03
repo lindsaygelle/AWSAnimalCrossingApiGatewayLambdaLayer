@@ -40,7 +40,7 @@ jobs:
           --no-color --no-input --no-user --timeout $PIP_TIMEOUT --upgrade --verbose
       - name: Install Terraform@latest
         uses: hashicorp/setup-terraform@v1
-      - name: Create Terraform remote state file
+      - name: Run Terraform@latest backend.tf
         run: |
           cat <<EOT >> backend.tf
           terraform {
@@ -51,11 +51,11 @@ jobs:
             }
           }
           EOT
-      - name: Create ${{ github.environment }}.tfvars
+      - name: Run Terraform@latest ${{ github.environment }}.tfvars
         run: |
           cat <<EOT >> ${{ github.environment }}.tfvars
-          account = ${{ secret.AWS_ACCOUNT_ID }}
-          region = ${{ secret.AWS_DEFAULT_REGION }}
+          account = ${{ secrets.AWS_ACCOUNT_ID }}
+          region = ${{ secrets.AWS_DEFAULT_REGION }}
           EOT
       - name: Run Terraform@latest initalize
         run: |
