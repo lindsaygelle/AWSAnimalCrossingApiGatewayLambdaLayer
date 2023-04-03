@@ -8,6 +8,9 @@ on:
       - "**/*.py"
       - "**/*.tf"
       - "**/requirements.txt"
+  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   production:
