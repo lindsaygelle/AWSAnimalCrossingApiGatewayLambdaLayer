@@ -52,9 +52,11 @@ jobs:
         run: |
           git status --porcelain
       - name: Run GitHub@latest commit
+        if: $(git status --porcelain | wc -l) -eq "0"
         run: |
           git commit -am "Autoformatting (${{ github.ref }})"
       - name: Run GitHub@latest push ${{ github.ref }} ${{ github.event.head_commit.author.name }}
+        if: $(git status --porcelain | wc -l) -eq "0"
         uses: ad-m/github-push-action@master
         with:
           branch: ${{ github.ref }}
