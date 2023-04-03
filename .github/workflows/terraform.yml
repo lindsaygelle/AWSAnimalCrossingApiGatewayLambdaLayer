@@ -27,8 +27,6 @@ jobs:
     steps:
       - name: Install Actions/Checkout@v3
         uses: actions/checkout@v3
-      - name: Install Actions/Python@v3
-        uses: actions/setup-python@v3
       - name: Install Terraform@latest
         uses: hashicorp/setup-terraform@v1
       - name: Run Terraform@latest initalize
