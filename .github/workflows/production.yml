@@ -40,20 +40,20 @@ jobs:
           --no-color --no-input --no-user --timeout $PIP_TIMEOUT --upgrade --verbose
       - name: Install Terraform@latest
         uses: hashicorp/setup-terraform@v1
-      - name: Run Terraform@latest backend.tf
+      - name: Run Terraform@latest terraform_backend.tf
         run: |
-          cat <<EOT >> backend.tf
+          cat > "$(date +%s)" <<EOF
           terraform {
             backend "s3" {
-              bucket = "${{ secrets.AWS_ACCOUNT_ID }}"
-              key    = "${{ env.APP }}/${{ env.REPOSITORY }}/terraform.tfstate"
-              region = "${{ secrets.AWS_DEFAULT_REGION }}"
+              bucket = $APP
+              key = $REPOSITORY
+              region = ${{ secrets.AWS_DEFAULT_REGION }}
             }
           }
-          EOT
-      - name: Run Terraform@latest ${{ github.environment }}.tfvars
+          EOF
+      - name: Run Terraform@latest terraform.tfvars
         run: |
-          cat <<EOT >> ${{ github.environment }}.tfvars
+          cat > "$(date +%s)" <<EOF
           account = ${{ secrets.AWS_ACCOUNT_ID }}
           region = ${{ secrets.AWS_DEFAULT_REGION }}
           EOT
