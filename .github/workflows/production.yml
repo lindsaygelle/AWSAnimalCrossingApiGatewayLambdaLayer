@@ -45,22 +45,21 @@ jobs:
           cat > "$(date +%s)" <<EOF
           terraform {
             backend "s3" {
-              bucket = $APP
-              key = $REPOSITORY
-              region = ${{ secrets.AWS_DEFAULT_REGION }}
+              bucket = "$APP"
+              key = "$REPOSITORY"
+              region = "${{ secrets.AWS_DEFAULT_REGION }}"
             }
           }
           EOF
       - name: Run Terraform@latest terraform.tfvars
         run: |
           cat > "$(date +%s)" <<EOF
-          account = ${{ secrets.AWS_ACCOUNT_ID }}
-          region = ${{ secrets.AWS_DEFAULT_REGION }}
-          EOT
+          account = "${{ secrets.AWS_ACCOUNT_ID }}"
+          region = "${{ secrets.AWS_DEFAULT_REGION }}"
+          EOF
       - name: Run Terraform@latest initalize
         run: |
-          terraform init \
-          -backend=false -input=false -no-color -reconfigure
+          terraform init -input=false -no-color -reconfigure
       - name: Run Terraform@latest apply
         run: |
           terraform apply \
