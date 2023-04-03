@@ -20,8 +20,7 @@ jobs:
     env:
       APP: "AnimalCrossing"
       PIP_TIMEOUT: 10
-      RESOURCE: "ApiGateway"
-      SERVICE: "LambdaLayer"
+      REPOSITORY: "ApiGatewayLambdaLayer"
     environment: development
     name: black
     runs-on: ubuntu-latest

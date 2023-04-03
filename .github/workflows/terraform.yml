@@ -19,8 +19,8 @@ jobs:
         shell: bash
     env:
       APP: "AnimalCrossing"
-      RESOURCE: "ApiGateway"
-      SERVICE: "LambdaLayer"
+      PIP_TIMEOUT: 10
+      REPOSITORY: "ApiGatewayLambdaLayer"
     environment: development
     name: black
     runs-on: ubuntu-latest
